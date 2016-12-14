@@ -1,0 +1,57 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+struct Shape
+{
+    int center_x;
+    int center_y;
+    virtual float square()=0;
+};
+struct Rectangle:Shape
+{
+
+    float width;
+    float height;
+    Rectangle(float w, float h){width=w; height=h;}
+    float square()
+    {
+        return width*height;
+    }
+};
+struct Circle:Shape
+{
+
+    float radius;
+      Circle(int r){radius=r;}
+    float square()
+    {
+        return pow(radius,2)*3.14;
+    }
+};
+struct Triangle:Shape
+{
+    Triangle(float a1, float b1){a=a1;b=b1;}
+    float a;
+    float b;
+    float square()
+    {
+    return a*b*0.5;
+    }
+};
+
+int main()
+{
+    Shape* figures[3];
+    figures[0]=new Rectangle(4,5);
+    figures[1]=new Circle(10);
+    figures[2]=new Triangle(3,4);
+
+    float square_sum=0;
+    for (int i=0;i<3;i++)
+    {
+        square_sum+=figures[i]->square();
+    }
+    cout<<square_sum<<endl;
+    return 1;
+}

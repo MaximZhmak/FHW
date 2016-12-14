@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+
+class Shape
+{
+    int center_x;
+    int center_y;
+public:
+    virtual float square()=0;
+};
+
+class Rectangle:public Shape
+{
+    float width;
+    float height;
+public:
+    Rectangle(float w, float h){width=w; height=h;}
+    float square()
+    {
+        return width*height;
+    }
+};
+
+class Circle: public Shape
+{
+
+    float radius;
+public:
+      Circle(int r){radius=r;}
+    float square()
+    {
+        return pow(radius,2)*3.14;
+    }
+};
+class Triangle: public Shape
+{
+
+    float a;
+    float b;
+public :
+     Triangle(float a1, float b1){a=a1;b=b1;}
+    float square()
+    {
+    return a*b*0.5;
+    }
+};
+int main()
+{
+    Shape* figures[3];
+    figures[0]=new Rectangle(4,5);
+    figures[1]=new Circle(10);
+    figures[2]=new Triangle(3,4);
+
+    float square_sum=0;
+    for (int i=0;i<3;i++)
+    {
+        square_sum+=figures[i]->square();
+    }
+    cout<<square_sum<<endl;
+    return 1;
+}
