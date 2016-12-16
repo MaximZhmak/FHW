@@ -3,15 +3,15 @@
 using namespace std;
 
 void PrintArray(const int* array, int size);
-int* InitializeArray(int* array, int size);
+void InitializeArray(int* array, int size);
 
-int* Map(int array[], int size, void(*f)(int array[], int size));
-int* Filter(int array[], int *size, bool(*f)(int num));
+int* Map(int array[], int size, int(*f)(int num));
+int* Filter(int array[], int &size, bool(*f)(int num));
 int Reduce(const int array[], int size, int(*f)(int num1, int num2));
 
 //funcs for map
-void Increment(int*array, int size);
-void Decrement(int *array, int size);
+int Increment(int num);
+int Decrement(int num);
 //funcs for filter
 bool IsEven(int num);
 bool IsOdd(int num);
@@ -22,134 +22,124 @@ int Subs(int num1, int num2);
 
 int main()
 {
-	setlocale(0, "rus");
-	int size = 20;
-	int*massiv = new int[size];
-	massiv = InitializeArray(massiv, size);
-	cout << "Initial array: ";
-	PrintArray(massiv, size);
+    setlocale(0, "rus");
+    int size = 20;
+    int array[20];
+    InitializeArray(array, size);
+    cout << "Initial array: ";
+    PrintArray(array, size);
 
 	//map
-	void(*f)(int array[], int size);//объявление указателя на функцию
-	f = Increment;
-	cout << "Incremented array: ";
-	PrintArray(Map(massiv, size, f), size);
-	
-	f = Decrement;
-	cout << "Decremented array: ";
-	PrintArray(Map(massiv, size, f), size);
-	
+
+    cout << "Incremented array: ";
+    PrintArray(Map(array, size, Increment), size);
+
+    cout << "Decremented array: ";
+    PrintArray(Map(array, size, Decrement), size);
+
 	//filter
-	bool(*f1)(int num);//объявление указателя на функцию
-	f1 = IsEven;
-	int new_size = size;
-	int*Massiv1 = new int[new_size];
-	Massiv1 = Filter(massiv, &new_size, f1);
-	cout << "Четные числа массива: " << endl;
-	PrintArray(Massiv1, new_size);
+
+    int new_size = size;
+    int*array1 = Filter(array, new_size, IsEven);
+    cout << "Even numbers of the array: " << endl;
+    PrintArray(array1, new_size);
 
 
-	new_size = size;
-	f1 = IsOdd;
-	Massiv1 = Filter(massiv, &new_size, f1);
-	cout << "Нечетные числа массива: " << endl;
-	PrintArray(Massiv1, new_size);
-	
+    new_size = size;
+
+    array1 = Filter(array, new_size, IsOdd);
+    cout << "Odd numbers of the array: " << endl;
+    PrintArray(array1, new_size);
+
 
 	//reduce
-	int(*f2)(int num1, int num2);
-	f2 = Sum;
-	cout << "Сумма элементов массива: ";
-	cout << reduce(massiv, size, f2) << endl;
 
-	f2 = Subs;
-	cout << "Произведение элементов массива: ";
-	cout << reduce(massiv, size, f2) << endl;
+    cout << "Sum of elements of array: ";
+    cout << Reduce(array, size, Sum) << endl;
 
 
-	return 1;
+    cout << "Differenece between elements of array: ";
+    cout << Reduce(array, size, Subs) << endl;
+
+
+    return 0;
 }
 
 void PrintArray(const int* array, int size)
 {
-	for (int i = 0; i < size; i++)
-	{
-		cout << array[i] << " ";
-	}
-	cout << endl;
+    for (int i = 0; i < size; i++)
+        {
+	    cout << array[i] << " ";
+        }
+    cout << endl;
 }
-int* InitializeArray(int* array, int size)
+void InitializeArray(int* array, int size)
 {
-	for (int i = 0; i < size; i++)
-	{
-		array[i] = i;
-	}
-	return array;
+    for (int i = 0; i < size; i++)
+        {
+            array[i] = i;
+        }
 }
 
 
-int* Map(int array[], int size, void(*f)(int array[], int size))
+int* Map(int array[], int size, int(*f)(int num))
 {
-	f(array, size);
-	return array;
+    for (int i = 0; i < size; i++)
+        {
+            array[i] = f(array[i]);
+        }
+    return array;
 }
-int* Filter(int array[], int *size, bool(*f)(int num))
+int* Filter(int array[], int &size, bool(*f)(int num))
 {
-	int * temp_array = new int[*size];
-	int j = 0;
-	for (int i = 0; i < *size; i++)
-	{
-		if (f(array[i]))
-		{
-			temp_array[j] = array[i];
-			j++;
-		}
-	}
-	int * new_array = new int[j];
-	for (int i = 0; i < j; i++)
-	{
-		new_array[i] = temp_array[i];
-	}
-	*size = j;
-	return new_array;
+    int * temp_array = new int[size];
+    int j = 0;
+    for (int i = 0; i < size; i++)
+        {
+            if (f(array[i]))
+            {
+                temp_array[j] = array[i];
+                j++;
+            }
+        }
+    size = j;
+    return temp_array;
 }
 int Reduce(const int array[], int size, int(*f)(int num1, int num2))
 {
-	int value = 0;
-	for (int i = 0, shift = 1; shift < size; shift++)
-	{
-		value = f(value, array[shift]);///
-	}
-	return value;
+    int value = 0;
+    for (int shift = 1; shift < size; shift++)
+        {
+            value = f(value, array[shift]);
+        }
+    return value;
 }
 
 
 //funcs for map
-void Increment(int*array, int size)
+int Increment(int num)
 {
-	for (int i = 0; i < size; i++)
-		array[i]++;
+    return ++num;
 }
-void Decrement(int *array, int size)
+int Decrement(int num)
 {
-	for (int i = 0; i < size; i++)
-		array[i]--;
+    return --num;
 }
 //funcs for filter
 bool IsEven(int num)
 {
-	return num % 2 == 0 ? true : false;
+    return num % 2 == 0 ? true : false;
 }
 bool IsOdd(int num)
 {
-	return !IsEven(num);
+    return !IsEven(num);
 }
 //funcs for reduce
 int Sum(int num1, int num2)
 {
-	return num1 + num2;
+    return num1 + num2;
 }
 int Subs(int num1, int num2)
 {
-	return num1-num2;
+    return num1 - num2;
 }

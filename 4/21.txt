@@ -1,63 +1,80 @@
-#include <iostream>
+
+#define _USE_MATH_DEFINES // for C++  
+
 #include <cmath>
+#include <iostream>
 using namespace std;
 
 
 class Shape
 {
-    int center_x;
-    int center_y;
+	int center_x;
+	int center_y;
 public:
-    virtual float square()=0;
+	Shape(int x, int y)
+	{
+		center_x = x;
+		center_y = y;
+	}
+	virtual float square() = 0;
 };
 
-class Rectangle:public Shape
+class Rectangle :public Shape
 {
-    float width;
-    float height;
+	float width;
+	float height;
 public:
-    Rectangle(float w, float h){width=w; height=h;}
-    float square()
-    {
-        return width*height;
-    }
+	Rectangle(int x, int y, float w, float h) : Shape(x, y)
+	{
+		width = w; height = h;
+	}
+	float square()
+	{
+		return width*height;
+	}
 };
 
-class Circle: public Shape
+class Circle : public Shape
 {
 
-    float radius;
+	float radius;
 public:
-      Circle(int r){radius=r;}
-    float square()
-    {
-        return pow(radius,2)*3.14;
-    }
+	Circle(int x, int y, int r) : Shape(x, y)
+	{
+		radius = r;
+	}
+	float square()
+	{
+		return pow(radius, 2)*M_PI;
+	}
 };
-class Triangle: public Shape
+class Triangle : public Shape
 {
 
-    float a;
-    float b;
-public :
-     Triangle(float a1, float b1){a=a1;b=b1;}
-    float square()
-    {
-    return a*b*0.5;
-    }
+	float a;
+	float b;
+public:
+	Triangle(int x, int y, float a1, float b1) : Shape(x, y)
+	{
+		a = a1; b = b1;
+	}
+	float square()
+	{
+		return a*b*0.5;
+	}
 };
 int main()
 {
-    Shape* figures[3];
-    figures[0]=new Rectangle(4,5);
-    figures[1]=new Circle(10);
-    figures[2]=new Triangle(3,4);
+	Shape* figures[3];
+	figures[0] = new Rectangle(5, 5, 4, 5);
+	figures[1] = new Circle(5, 5, 10);
+	figures[2] = new Triangle(5, 5, 3, 4);
 
-    float square_sum=0;
-    for (int i=0;i<3;i++)
-    {
-        square_sum+=figures[i]->square();
-    }
-    cout<<square_sum<<endl;
-    return 1;
+	float square_sum = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		square_sum += figures[i]->square();
+	}
+	cout << square_sum << endl;
+	return 1;
 }
