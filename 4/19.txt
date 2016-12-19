@@ -23,8 +23,8 @@ int Subs(int num1, int num2);
 int main()
 {
     setlocale(0, "rus");
-    int size = 20;
-    int array[20];
+    const int size = 20;
+    int array[size]={};
     InitializeArray(array, size);
     cout << "Initial array: ";
     PrintArray(array, size);
@@ -46,7 +46,7 @@ int main()
 
 
     new_size = size;
-
+    delete[]array1;
     array1 = Filter(array, new_size, IsOdd);
     cout << "Odd numbers of the array: " << endl;
     PrintArray(array1, new_size);

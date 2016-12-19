@@ -1,6 +1,29 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <time.h>
+#include <cstring>
+
 using namespace std;
+
+struct RepeatingSymbol
+{
+	char symb;
+	int count;
+};
+
+bool AlreadyAdded(const char symbol, RepeatingSymbol* array, int currentIndex)
+{
+	for (int i = 0; i < currentIndex; i++)
+	{
+		if (symbol == array[i].symb)
+		{
+			array[i].count++;
+			return true;
+		}
+	}
+	return false;
+}
+
 //7
 char*cat(char*string1, char* string2)
 {
@@ -20,71 +43,70 @@ char*cat(char*string1, char* string2)
 //8
 void RepeatCount()
 {
+	cout << "Enter string for counting repeats: ";
 	char*string = new char[20];
 	cin.getline(string, 19);
-	int i = 0;
-	char*string1 = new char[strlen(string)];
-	for (i = 0; i < strlen(string); i++)
+	RepeatingSymbol * array = new RepeatingSymbol[strlen(string)];
+	int repeats = 0;
+	for (int i = 0; i < strlen(string); i++)
 	{
-		int count = 0;
-		cout << string[i] << "\t";
-		string1[i] = string[i];
-		for (int j = 0; j < strlen(string); j++)
-			if (tolower(string1[j]) == tolower(string[i]))
-				count++;
-		cout << count << endl;
+		if (AlreadyAdded(string[i], array, i)==false)
+		{
+			array[i].count = 1;
+			array[i].symb = string[i];
+		}
+		else
+		{
+			repeats++;
+		}
 	}
+	for (int i = 0; i < strlen(string)-repeats; i++)
+	{
+		if (array[i].count != 0)
+			cout << array[i].symb << " = " << array[i].count << endl;
+	}
+	delete[]string;
+	string = nullptr;
+	delete[]array;
+	array = nullptr;
 }
 //9
-char*shiffredRaw()
+char*shiffredRaw(char* string)
 {
-	char*string1 = new char[30];
-	cin.getline(string1, 29);
-	char*table = "abcdefgh123456-0";
-	for (size_t i = 0; i < strlen(string1); i++)
+	const char*table = "abcdefgh123456-0";
+	for (size_t i = 0; i < strlen(string); i++)
 	{
 		for (int j = 0; j < strlen(table); j++)
 		{
-			if (string1[i] == table[j])
+			if (string[i] == table[j])
 			{
-				if (j + 5 <= strlen(table))
-					string1[i] = table[j + 5];
-				else
-				{
-					int index = 5 - (strlen(table) - j);
-					string1[i] = table[index];
-				}
+				string[i] = table[(j + 5) % strlen(table)];
 				break;
 			}
 		}
 	}
-	return string1;
+	return string;
 }
 //10
-char*MakeCaps(char*string)
+void MakeCaps(char*string)
 {
-	char*str1 = new char[strlen(string) + 1];
-	if (string[0] > 96 && string[0] < 123)
-		str1[0] = string[0] - 32;
+	char*str1 = new char[strlen(string)+1]();
+	if (string[0] >= 'a' && string[0] <= 'z')
+		str1[0] = toupper(string[0]);
 	else
 		str1[0] = string[0];
 	for (int i = 1; i < strlen(string); i++)
 	{
-		if (string[i] == 32)
+		str1[i] = string[i];
+		if (string[i] == ' ')
 		{
-			str1[i] = string[i];
-			str1[i + 1] = string[i + 1] - 32;
+			str1[i + 1] = toupper(string[i + 1]);		
 			i++;
 		}
-
-		else
-		{
-			str1[i] = string[i];
-		}
-
 	}
-	str1[strlen(string)] = '\0';
-	return str1;
+	cout << str1 << endl;
+	delete[]str1;
+	str1 = nullptr;
 }
 //11
 char*CuttedString(char*string)
@@ -94,9 +116,9 @@ char*CuttedString(char*string)
 	for (int i = 0; i < strlen(string); i++)
 	{
 		str[i] = string[i + 1];
-		if (string[i + 2] == 32)
+		if (string[i + 2] == ' ')
 		{
-			str[i + 1] = 32;
+			str[i + 1] = ' ';
 			str[i + 2] = string[i + 2];
 			i += 2;
 		}
@@ -107,79 +129,63 @@ char*CuttedString(char*string)
 //12
 void SwapArray()
 {
-	int *mas = new int[12];
 	int mas1[] = { 1,2,3,4,5,6,7,8,9,10,11,12 };
 	for (int i = 0; i < sizeof(mas1) / sizeof(int); i++)
 	{
 		if ((i % 2 == 1) && i < sizeof(mas1) / sizeof(int) - 1)
 		{
-			int temp = mas1[i];
-			mas1[i] = mas1[i + 1];
-			mas1[i + 1] = temp;
+			swap(mas1[i], mas1[i + 1]);
 		}
 		cout << mas1[i] << " ";
 	}
-	delete[]mas1;
 }
 //13
 void RandomizeArray()
 {
-	int Array[50];
-	for (int i = 0, j = 0; i < 100; i++)
+	const int size = 50;
+	int Array[size];
+	for (int i = 1, j = 0; i < size*2; i += 2)
 	{
-		if ((i % 2) == 1)
-		{
-			Array[j] = i;
-			cout << Array[j] << " ";
-			j++;
-		}
+		Array[j] = i;
+		cout << Array[j] << " ";
+		j++;
 	}
-	cout << "=========================================================" << endl;
+	cout << "\n=========================================================" << endl;
+	
 	srand(time(0));
-	int a = 0;
-	int i = 0;
-	int RandArray[50];
-	while (i < 50)
+	
+	int j = 0;
+	for (int i = 0; i < size; i++)
 	{
-		a = Array[rand() % 51];
-		for (int j = i; j >= 0; j--)
-		{
-			if (RandArray[j] == a)
-				break;
-			else if (j == 0)
-			{
-				RandArray[i] = a;
-				cout << RandArray[i] << " ";
-				i++;
-			}
-		}
+		j = rand() % size;
+		swap(Array[i], Array[j]);
+		cout << Array[i] << " ";
 	}
 }
 
 
 void main()
 {
-	////	7. Напишите функцию cat(), которая принимает в качестве аргументов две C - строки и возвращает конкатенированную C - строку.
-	////Используйте оператор new для выделения памяти под результат
-	//cout << cat("Maxim ", "Zhmak") << endl;
+	//	7. 
 
-	////8. Подсчитать количество повторений разных символов во введенной пользователем строке.
+	cout << cat("Maxim ", "Zhmak") << endl;
 
-	//RepeatCount();
-	//
-	////9.
-
-	cout << shiffredRaw();
-
+	//8. 
+	RepeatCount();
+	//9.
+	cout << "Enter string: ";
+	char*string1 = new char[30];
+	cin.getline(string1, 29);
+	cout << shiffredRaw(string1) << endl;
+	delete[]string1;
+	string1 = nullptr;
 	//10
-	//cout << MakeCaps("just another string with few words") << endl;
-
-	//11. Удалить из строки первые буквы каждого слова.
-	//cout << CuttedString("just another string with few words") << endl;
+	char* text = "just another string with few words";
+	MakeCaps(text);
+	//11. 
+	cout << CuttedString("just another string with few words") << endl;
 	//12
-	//SwapArray();
+	SwapArray();
 	//13
-	//RandomizeArray();
-
-
+	RandomizeArray();
 }

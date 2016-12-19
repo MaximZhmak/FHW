@@ -3,60 +3,51 @@
 #include <iomanip>
 using namespace std;
 
-//14. генератор паролей
+//14. password generator
 char*password()
 {
 	srand(time(0));
-	char*pass = new char[9];
-	char*symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
+	const int size = 9;
+	char*pass = new char[size];
+	const char *symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
 	bool condition1, condition2, condition3;
 	condition1 = condition2 = condition3 = false;
+
 	do
 	{
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < size - 1; i++)
 		{
 			pass[i] = symbols[rand() % strlen(symbols)];
-		}
-		pass[8] = '\0';
-		for (int i = 0; i < 8; i++)
-		{
-			if (pass[i] > 47 && pass[i] < 58) //есть цифры
+			if (pass[i] >= '0' && pass[i] <= '9') //numbers
 			{
 				condition1 = true;
-				break;
 			}
-		}
-		for (int i = 0; i < 8; i++)
-		{
-			if (pass[i] > 64 && pass[i] < 91) //есть большие буквы
+			if (pass[i] >= 'A' && pass[i] <= 'Z') //capital letters
 			{
 				condition2 = true;
-				break;
 			}
-		}
-		for (int i = 0; i < 8; i++)
-		{
-			if (pass[i] > 96 && pass[i] < 123) //есть маленькие буквы
+			if (pass[i] >= 'a' && pass[i] <= 'z') //small letters
 			{
 				condition3 = true;
-				break;
 			}
 		}
+
+		pass[size - 1] = '\0';
 	} while (condition1 == false ||
 		condition2 == false ||
 		condition3 == false);
-	delete[]symbols;
+
 	return pass;
 }
 //15.
 int **CreateMatrix(int n, int m)
 {
-	srand(time(0));
-	//создание двумерного динам.массива
+
+	//craeting 2D array
 	int **array = new int*[n];
 	for (int i = 0; i < n; i++)
 		array[i] = new int[m];
-	//заполнение двум.дин.массива
+	//initializing 2D array
 	for (int i = 0; i < n; i++)
 		for (int j = 0; j < m; j++)
 			array[i][j] = (rand() % 21);
@@ -73,50 +64,62 @@ void PrintMatrix(int**matrix, int n, int m)
 		cout << endl;
 	}
 }
-int **TurnMatrix(int**matrix, int n, int m)
+int** TurnMatrix(int**matrix, int n, int m)
 {
-	int **new_array = new int*[n];
+	//creating new turned matrix
+	int **new_array = new int*[m];
 	for (int i = 0; i < m; i++)
+	{
 		new_array[i] = new int[n];
-	for (int i = 0; i < m; i++)
+	}
+	//initializing new turned matrix
+	for (int i = 0; i < m; i++)//
+	{
 		for (int j = 0; j < n; j++)
-			new_array[i][j] = matrix[j][i];
+		{
+			new_array[i][j] = matrix[n - 1 - j][i];
+		}
+	}
 	return new_array;
 }
 //16.
-int Determinant(int **matrix, int n, int m)
+int Determinant(int **matrix)
 {
 	return matrix[0][0] * matrix[1][1] * matrix[2][2] +
 		matrix[0][1] * matrix[1][2] * matrix[2][0] +
 		matrix[0][2] * matrix[1][0] * matrix[2][1] -
 		matrix[0][2] * matrix[1][1] * matrix[2][0] -
 		matrix[0][0] * matrix[1][2] * matrix[2][1] -
-		matrix[0][1] * matrix[3][2] * matrix[2][2];
+		matrix[0][1] * matrix[1][0] * matrix[2][2];
 
 }
 //17.
-void MultMatrix(int **matrix1, int n1, int m1, int**matrix2)
+void MultMatrix(int **matrix1, int n1, int m1, int l1, int**matrix2)
 {
-
-	int **NEWMATRIX = new int *[n1];
-	for (int i = 0; i < n1; i++)
-		NEWMATRIX[i] = new int[m1];
-	//умножение матриц
-	cout << "Произведение матриц: " << endl;
+	int **new_matrix = new int*[n1];
 	for (int i = 0; i < n1; i++)
 	{
-		for (int j = 0; j < m1; j++)
+		new_matrix[i] = new int[l1];
+	}
+	for (int i = 0; i < n1; i++)
+	{
+		for (int j = 0; j < l1; j++)
 		{
-			NEWMATRIX[i][j] = matrix1[i][j] * matrix2[i][j];
-			cout << setw(3) << NEWMATRIX[i][j];
+			for (int k = 0; k < m1; k++)
+			{
+				new_matrix[i][j] = matrix1[i][k] * matrix2[k][j];
+			}
+		}
+	}
+	cout << "Result of matrix multiplication: " << endl;
+	for (int i = 0; i < m1; i++)
+	{
+		for (int j = 0; j < l1; j++)
+		{
+			cout << new_matrix[i][j] << " ";
 		}
 		cout << endl;
 	}
-	for (int i = 0; i < n1; i++)
-	{
-		delete[]NEWMATRIX[i];
-	}
-	delete[]NEWMATRIX;
 }
 //18.
 struct Professor
@@ -171,7 +174,8 @@ void PrintStudents(Student*group, int count)
 
 int main()
 {
-	setlocale(0, "rus");
+	srand(time(0));
+
 	//14
 	cout << password() << endl;
 	////15
@@ -181,10 +185,11 @@ int main()
 	cout << "enter m: ";
 	cin >> m;
 	int**matrix = CreateMatrix(n, m);
+	int**matrix2;
 	PrintMatrix(matrix, n, m);
 	cout << "New Matrix: \n";
-	matrix = TurnMatrix(matrix, n, m);
-	PrintMatrix(matrix, n, m);
+	matrix2 = TurnMatrix(matrix, n, m);
+	PrintMatrix(matrix2, m, n);
 	for (int i = 0; i < n; i++)
 	{
 		delete[]matrix[i];
@@ -195,8 +200,8 @@ int main()
 	cout << "Matrix: " << endl;
 	int **matrix_2 = CreateMatrix(3, 3);
 	PrintMatrix(matrix_2, 3, 3);
-	cout << "Matrix determinant = " << Determinant(matrix_2, 3, 3) << endl;
-	for (int i = 0; i <3; i++)
+	cout << "Matrix determinant = " << Determinant(matrix_2) << endl;
+	for (int i = 0; i < 3; i++)
 	{
 		delete[]matrix_2[i];
 	}
@@ -204,17 +209,20 @@ int main()
 
 	//17. 
 	cout << "=================Matrix multiplication====================\n";
-	int n, m;
-	cout << "Введите кол-во строк  ";
+	int k = 0;
+	cout << "Enter  number of rows of first matrix: ";
 	cin >> n;
-	cout << "Введите кол-во столбцов ";
+	cout << "Enter number of cols of first matrix: ";
 	cin >> m;
+	cout << "Enter number of cols of second matrix: ";
+	cin >> k;
+
 	int **matrix1 = new int*[n];
-	//создание матрицы1
+	////matrix1 creation
 	for (int i = 0; i < n; i++)
 		matrix1[i] = new int[m];
-	//заполнение матрицы
-	cout << "Первая матрица: " << endl;
+	////initializing matrix1
+	cout << "First matrix: " << endl;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
@@ -224,22 +232,22 @@ int main()
 		}
 		cout << endl;
 	}
-	int **matrix2 = new int*[n];
-	//создание матрицы2
-	for (int i = 0; i < n; i++)
-		matrix2[i] = new int[m];
-	//заполнение матрицы
-	cout << "Вторая матрица: " << endl;
-	for (int i = 0; i < n; i++)
+	matrix2 = new int*[m];
+	////matrix2 creation
+	for (int i = 0; i < m; i++)
+		matrix2[i] = new int[k];
+	////initializing matrix1
+	cout << "Second matrix: " << endl;
+	for (int i = 0; i < m; i++)
 	{
-		for (int j = 0; j < m; j++)
+		for (int j = 0; j < k; j++)
 		{
-			cout <<"["<<i<<"]["<<j<<"] :";
-			cin >> matrix2[i][j];			
+			cout << "[" << i << "][" << j << "] :";
+			cin >> matrix2[i][j];
 		}
 		cout << endl;
 	}
-	MultMatrix(matrix1, n, m, matrix2);
+	MultMatrix(matrix1, n, m,k, matrix2);
 	for (int i = 0; i < n; i++)
 	{
 		delete[]matrix1[i];
@@ -248,15 +256,15 @@ int main()
 	delete[]matrix1;
 	delete[]matrix2;
 
-	//18.
+	////18.
 	Professor professors[5];
 	Student group[8];
 	int count = sizeof(group) / sizeof(Student);
-	cout << "Средний балл группы: " << GroupGPA(group, count) << endl;
-	cout << "Лучший студент: " <<BestStudent(group,count)->name << endl;
-	cout << "Худший студент: " <<WorstStudent(group,count)->name << endl;
-	cout << "Список студентов с научными руководителями старше 50ти лет: " << endl;
+	cout << "Group GPA: " << GroupGPA(group, count) << endl;
+	cout << "Best student: " << BestStudent(group, count)->name << endl;
+	cout << "Worst student: " << WorstStudent(group, count)->name << endl;
+	cout << "List of students with supervisors older than 50: " << endl;
 	PrintStudents(group, count);
 
-	return 1;
+	return 0;
 }
