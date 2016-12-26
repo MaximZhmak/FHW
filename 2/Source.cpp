@@ -111,16 +111,17 @@ void MakeCaps(char*string)
 //11
 char*CuttedString(char*string)
 {
+	int j = 0;
 	int lenght = strlen(string);
 	char* str = new char[lenght];
 	for (int i = 0; i < strlen(string); i++)
 	{
-		str[i] = string[i + 1];
-		if (string[i + 2] == ' ')
+		str[j] = string[i];
+		j++;
+		if (string[i] == ' ')
 		{
-			str[i + 1] = ' ';
-			str[i + 2] = string[i + 2];
-			i += 2;
+			i++;
+			lenght--;
 		}
 	}
 	str[lenght] = '\0';
@@ -179,13 +180,13 @@ void main()
 	cout << shiffredRaw(string1) << endl;
 	delete[]string1;
 	string1 = nullptr;
-	//10
+	////10
 	char* text = "just another string with few words";
 	MakeCaps(text);
 	//11. 
-	cout << CuttedString("just another string with few words") << endl;
+	cout << CuttedString("a b c d") << endl;
 	//12
 	SwapArray();
-	//13
+	////13
 	RandomizeArray();
 }
