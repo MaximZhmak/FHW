@@ -28,10 +28,40 @@ public:
 
 	}
 	virtual string Render() = 0;
-	
+	virtual HtmlElement* Duplicate() = 0;
 };
 
+template<typename T>
+bool all_of(T* arr, size_t length, bool(*p)( T& elem))
+{
+	for (size_t i = 0; i<length; i++)
+	{
+		if (p(arr[i]))
+			continue;
+		else
+			return false;
+	}
+	return true;
+}
 
+template<typename T>
+bool any_of(T* arr, size_t length, bool(*p)( T& elem))
+{
+	for (size_t i = 0; i<length; i++)
+	{
+		if (p(arr[i]))
+			return true;
+		else
+			continue;
+	}
+	return false;
+}
+
+template<typename T=HtmlElement*>
+bool Filter(T*& elem)
+{
+	return elem->Hidden();
+}
 
 class HTMLButtonElement : public HtmlElement
 {
@@ -50,6 +80,11 @@ public:
 	{
 		return "<button>" + Title() + "</button>";
 	}
+	HtmlElement* Duplicate() override
+	{
+		return new HTMLButtonElement(*this);
+	}
+
 	
 };
 class HTMLImageElement : public HtmlElement
@@ -68,6 +103,10 @@ public:
 	string Render() override
 	{
 		return "<img src=\"" + Url() + "\" height=\"42\" width=\"42\"";
+	}
+	HtmlElement* Duplicate() override
+	{
+		return new HTMLImageElement(*this);
 	}
 
 };
@@ -88,6 +127,10 @@ public:
 	{
 		return "<textarea>" + Content() + "</textarea>";
 	}
+	HtmlElement* Duplicate() override
+	{
+		return new HTMLTextAreaDocument(*this);
+	}
 
 };
 
@@ -100,14 +143,30 @@ int main()
 	elements[1] = new HTMLImageElement("../../smiley.gif");
 	elements[2] = new HTMLTextAreaDocument("content-of-the-text-area");
 
-
+	cout << "==========INITIAL ARRAY=========" << endl;
 	for (int i = 0; i < 3; i++)
 	{
 		cout << elements[i]->Render() << endl;
 	}
+	HtmlElement* elements1[3];
+	cout << "\n\n==========COPIED ARRAY=========" << endl;
+	for (int i = 0; i < 3; i++)
+	{
+		elements1[i] = elements[i]->Duplicate();
+		cout << elements1[i]->Render() << endl;
+	}
+
+	assert(all_of(elements1, 3, Filter) == 0);
+	cout << all_of(elements1, 3, Filter) << endl;
+	assert(any_of(elements1, 3, Filter) == 1);
+	cout << any_of(elements1, 3, Filter) << endl;
+
+
+
 
 	for (int i = 0; i < 3; i++)
 	{
+		delete elements1[i];
 		delete elements[i];
 	}
 	return 0;	

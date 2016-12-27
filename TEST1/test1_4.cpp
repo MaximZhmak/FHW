@@ -20,19 +20,24 @@ int main()
    const int size=5;
     int array[size]={1,2,4,6,8};
 
-
-
-     assert(all_of(array,size, Filter)==0);
-     cout<<all_of(array,size, Filter)<<endl;
-     assert(any_of(array,size, Filter)==1);
+     assert(all_of(array, size, Filter)==0);
+     cout<<all_of(array, size, Filter)<<endl;
+     assert(any_of(array, size, Filter)==1);
      cout<<any_of(array,size, Filter)<<endl;
 
 
      double array1[size]={1.0, 2.0, 4.0, 6.0 ,8.0};
-     assert(all_of(array1,size, Filter)==0);
-     cout<<all_of(array1,size, Filter)<<endl;
-     assert(any_of(array1,size, Filter)==1);
-     cout<<any_of(array1,size, Filter)<<endl;
+     assert(all_of(array1, size, Filter)==0);
+     cout<<all_of(array1, size, Filter)<<endl;
+     assert(any_of(array1, size, Filter)==1);
+     cout<<any_of(array1, size, Filter)<<endl;
+
+
+	 float array2[size] = { 1.0f, 2.0f, 4.0f, 6.0f ,8.0f };
+	 assert(all_of(array2, size, Filter) == 0);
+	 cout << all_of(array2, size, Filter) << endl;
+	 assert(any_of(array2, size, Filter) == 1);
+	 cout << any_of(array2, size, Filter) << endl;
 
 }
 
@@ -52,7 +57,7 @@ bool all_of(T* arr, size_t length, bool(*p)(const T& elem))
 template<typename T>
 bool any_of(T* arr, size_t length, bool(*p)(const T& elem))
 {
-    for (int i=0;i<length;i++)
+    for (size_t i=0;i<length;i++)
     {
         if (p(arr[i]))
           return true;
