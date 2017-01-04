@@ -27,6 +27,7 @@ public:
 	{
 
 	}
+	virtual ~HtmlElement() {}
 	virtual string Render() = 0;
 	virtual HtmlElement* Duplicate() = 0;
 };

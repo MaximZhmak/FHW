@@ -28,6 +28,7 @@ public:
 
 	}
 	virtual string Render() = 0;
+	virtual ~HtmlElement() {}
 	
 };
 
@@ -42,6 +43,7 @@ public:
 	{
 
 	}
+	
 	const string& Title() const
 	{
 		return m_button_title;
@@ -80,6 +82,7 @@ public:
 	{
 
 	}
+	
 	const string& Content() const
 	{
 		return m_content;
