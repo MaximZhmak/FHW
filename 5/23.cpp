@@ -8,131 +8,135 @@ const int arabar[] = { 1,   4,    5,   9,    10,  40,  50,   90,  100, 400,  500
 const char *romanar[] = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
 
 char *arab2roman(unsigned short int arab);
-unsigned short int roman2arab(char *roman);
+unsigned short int roman2arab(const char *roman);
 
 class RomanNumber
 {
 private:
-	unsigned short int number;
+	unsigned short int m_number;
 public:
-	RomanNumber(char * string)
+	RomanNumber(const char * string)
 	{
-		number = roman2arab(string);
+		m_number = roman2arab(string);
+	}
+	RomanNumber(unsigned short int value) : m_number(value)
+	{
+
 	}
 
 	//---------------------------------------------------------
 
 	explicit operator unsigned short int() const
 	{
-		return number;
+		return m_number;
 	}
 
 	//----------------------------------------------------------
-	RomanNumber& operator+(const RomanNumber &num)
+	RomanNumber operator+(const RomanNumber &num)
 	{
 		unsigned short int rhs = unsigned short int(num);
-		return RomanNumber(arab2roman(number + rhs));
+		return RomanNumber(m_number + rhs);
 	}
-	RomanNumber& operator-(const RomanNumber &num)
+	RomanNumber operator-(const RomanNumber &num)
 	{
-		if (number > unsigned short int(num))
+		if (m_number > unsigned short int(num))
 		{
 			unsigned short int rhs = unsigned short int(num);
-			return RomanNumber(arab2roman(number - rhs));
+			return RomanNumber(m_number - rhs);
 		}
 	}
 	RomanNumber& operator*(const RomanNumber &num)
 	{
 		unsigned short int rhs = unsigned short int(num);
-		return RomanNumber(arab2roman(number * rhs));
+		return RomanNumber(m_number * rhs);
 	}
 	RomanNumber& operator/(const RomanNumber &num)
 	{
-		if (this->number > unsigned short int(num))
+		if (this->m_number > unsigned short int(num))
 		{
 			unsigned short int rhs = unsigned short int(num);
-			return RomanNumber(arab2roman(number / rhs));
+			return RomanNumber(m_number / rhs);
 		}
 	}
 
-	RomanNumber& operator+(const int value)
+	RomanNumber operator+(const int value)
 	{
-		number += value;
+		m_number += value;
 		return *this;
 	}
-	RomanNumber& operator-(const int value)
+	RomanNumber operator-(const int value)
 	{
-		if (number > value)
+		if (m_number > value)
 		{
-			number -= value;
+			m_number -= value;
 			return *this;
 		}
 	}
-	RomanNumber& operator*(const int value)
+	RomanNumber operator*(const int value)
 	{
-		number *= value;
+		m_number *= value;
 		return *this;
 	}
-	RomanNumber& operator/(const int value)
+	RomanNumber operator/(const int value)
 	{
-		if (this->number > value)
+		if (this->m_number > value)
 		{
-			number /= value;
+			m_number /= value;
 			return *this;
 		}
 	}
 
 	//----------------------------------------------------------
-	RomanNumber& operator+=(const RomanNumber &num)
+	RomanNumber operator+=(const RomanNumber &num)
 	{
-		number += unsigned short int(num);
+		m_number += unsigned short int(num);
 		return *this;
 	}
-	RomanNumber& operator-=(const RomanNumber &num)
+	RomanNumber operator-=(const RomanNumber &num)
 	{
-		if (number > unsigned short int(num))
+		if (m_number > unsigned short int(num))
 		{
-			number -= unsigned short int(num);
+			m_number -= unsigned short int(num);
 			return *this;
 		}
 	}
-	RomanNumber& operator*=(const RomanNumber &num)
+	RomanNumber operator*=(const RomanNumber &num)
 	{
-		number *= unsigned short int(num);
+		m_number *= unsigned short int(num);
 		return *this;
 	}
-	RomanNumber& operator/=(const RomanNumber &num)
+	RomanNumber operator/=(const RomanNumber &num)
 	{
-		if (number > unsigned short int(num))
+		if (m_number > unsigned short int(num))
 		{
-			number /= unsigned short int(num);
+			m_number /= unsigned short int(num);
 			return *this;
 		}
 	}
 
-	RomanNumber& operator+=(const int value)
+	RomanNumber operator+=(const int value)
 	{
-		number += value;
+		m_number += value;
 		return *this;
 	}
-	RomanNumber& operator-=(const int value)
+	RomanNumber operator-=(const int value)
 	{
-		if (number > value)
+		if (m_number > value)
 		{
-			number -= value;
+			m_number -= value;
 			return *this;
 		}
 	}
-	RomanNumber& operator*=(const int value)
+	RomanNumber operator*=(const int value)
 	{
-		number *= value;
+		m_number *= value;
 		return *this;
 	}
-	RomanNumber& operator/=(const int value)
+	RomanNumber operator/=(const int value)
 	{
-		if (this->number > value)
+		if (this->m_number > value)
 		{
-			number /= value;
+			m_number /= value;
 			return *this;
 		}
 	}
@@ -140,7 +144,7 @@ public:
 	//----------------------------------------------------------
 	bool operator==(const RomanNumber&num)
 	{
-		return number == unsigned short int(num);
+		return m_number == unsigned short int(num);
 	}
 	bool operator!=(const RomanNumber&num)
 	{
@@ -148,24 +152,24 @@ public:
 	}
 	bool operator<(const RomanNumber&num)
 	{
-		return number <  unsigned short int(num);
+		return m_number <  unsigned short int(num);
 	}
 	bool operator>(const RomanNumber&num)
 	{
-		return number > unsigned short int(num);
+		return m_number > unsigned short int(num);
 	}
 	bool operator<=(const RomanNumber&num)
 	{
-		return number <= unsigned short int(num);
+		return m_number <= unsigned short int(num);
 	}
 	bool operator>=(const RomanNumber&num)
 	{
-		return number >= unsigned short int(num);
+		return m_number >= unsigned short int(num);
 	}
 
 	bool operator==(const int value)
 	{
-		return number == value;
+		return m_number == value;
 	}
 	bool operator!=(const int value)
 	{
@@ -173,42 +177,42 @@ public:
 	}
 	bool operator<(const int value)
 	{
-		return number < value;
+		return m_number < value;
 	}
 	bool operator>(const int value)
 	{
-		return number > value;
+		return m_number > value;
 	}
 	bool operator<=(const int value)
 	{
-		return number <= value;
+		return m_number <= value;
 	}
 	bool operator>=(const int value)
 	{
-		return number >= value;
+		return m_number >= value;
 	}
 
 	//----------------------------------------------------------
-	RomanNumber& operator++(int num)
+	RomanNumber operator++(int num)
 	{
 		RomanNumber tmp(*this);
-		number++;
+		m_number++;
 		return tmp;
 	}
-	RomanNumber& operator--(int num)
+	RomanNumber operator--(int num)
 	{
 		RomanNumber tmp(*this);
-		number--;
+		m_number--;
 		return tmp;
 	}
 	RomanNumber operator--()
 	{
-		--number;
+		--m_number;
 		return *this;
 	}
 	RomanNumber operator++()
 	{
-		++number;
+		++m_number;
 		return *this;
 	}
 	//----------------------------------------------------------
@@ -225,7 +229,7 @@ ostream& operator<< (ostream& os, RomanNumber num)
 }
 istream& operator >> (istream& is, RomanNumber&num)
 {
-	is >> num.number;
+	is >> num.m_number;
 	return is;
 }
 
@@ -258,7 +262,7 @@ char *arab2roman(unsigned short int arab) {
 	roman[i] = 0;
 	return roman;
 }
-unsigned short int roman2arab(char *roman) {
+unsigned short int roman2arab(const char *roman) {
 	const int m = sizeof(arabar) / sizeof(int) - 1;
 	unsigned short int arab;
 	int len, n, i, pir;
@@ -283,14 +287,22 @@ unsigned short int roman2arab(char *roman) {
 int main()
 {
 	RomanNumber num0 = RomanNumber("XIX");
-
-
-
 	RomanNumber num1("L");
 	RomanNumber num2("X");
 	RomanNumber num3("I");
 	RomanNumber num4("X");
 	RomanNumber num5("III");
+
+	cout << "num0 = " << num0
+		<< ", num1 = " << num1
+		<< ", num2 = " << num2
+		<< ", num3 = " << num3
+		<< ", num4 = " << num4
+		<< ", num5 = " << num5
+		<< endl
+		<< endl;
+
+
 
 	cout << "num1 + num2: " << num1 + num2 << endl;
 	cout << "num1 - num2: " << num1 - num2 << endl;
