@@ -112,9 +112,9 @@ void MakeCaps(char*string)
 char*CuttedString(char*string)
 {
 	int j = 0;
-	int lenght = strlen(string);
+	int lenght = strlen(string)-1;
 	char* str = new char[lenght];
-	for (int i = 0; i < strlen(string); i++)
+	for (int i = 1; i < strlen(string); i++)
 	{
 		str[j] = string[i];
 		j++;
@@ -124,6 +124,7 @@ char*CuttedString(char*string)
 			lenght--;
 		}
 	}
+	
 	str[lenght] = '\0';
 	return str;
 }
