@@ -8,59 +8,58 @@ using namespace std;
 
 class Shape
 {
-	int center_x;
-	int center_y;
+	int m_center_x;
+	int m_center_y;
 public:
-	Shape(int x, int y)
+	Shape(int x, int y) :m_center_x(x), m_center_y(y)
 	{
-		center_x = x;
-		center_y = y;
+
 	}
 	virtual float square() = 0;
 };
 
 class Rectangle :public Shape
 {
-	float width;
-	float height;
+	float m_width;
+	float m_height;
 public:
-	Rectangle(int x, int y, float w, float h) : Shape(x, y)
+	Rectangle(int x, int y, float w, float h) : Shape(x, y), m_width(w), m_height(h)
 	{
-		width = w; height = h;
+
 	}
-	float square()
+	float square() override
 	{
-		return width*height;
+		return m_width*m_height;
 	}
 };
 
 class Circle : public Shape
 {
 
-	float radius;
+	float m_radius;
 public:
-	Circle(int x, int y, int r) : Shape(x, y)
+	Circle(int x, int y, int r) : Shape(x, y), m_radius(r)
 	{
-		radius = r;
+		
 	}
-	float square()
+	float square() override
 	{
-		return pow(radius, 2)*M_PI;
+		return pow(m_radius, 2)*M_PI;
 	}
 };
 class Triangle : public Shape
 {
 
-	float a;
-	float b;
+	float m_a;
+	float m_b;
 public:
-	Triangle(int x, int y, float a1, float b1) : Shape(x, y)
+	Triangle(int x, int y, float a1, float b1) : Shape(x, y), m_a(a1), m_b(b1)
 	{
-		a = a1; b = b1;
+		
 	}
-	float square()
+	float square() override
 	{
-		return a*b*0.5;
+		return m_a*m_b*0.5;
 	}
 };
 int main()
