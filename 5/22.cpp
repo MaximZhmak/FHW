@@ -11,6 +11,20 @@ class String
 	char* m_buffer;
 	size_t* m_refCounter;
 
+	void Attach(const String& rhs)
+	{
+
+		m_refCounter = rhs.m_refCounter;
+		m_buffer = rhs.m_buffer;
+		(*m_refCounter)++;
+	}
+	void Detach()
+	{
+		(*m_refCounter)--;
+
+		m_buffer = nullptr;
+
+	}
 public:
 	String(const char* value)
 		: m_buffer(new char[strlen(value) + 1]),
@@ -25,11 +39,6 @@ public:
 		, m_refCounter(rhs.m_refCounter)
 	{
 		(*m_refCounter)++;
-	}
-
-	size_t count() const
-	{
-		return *m_refCounter;
 	}
 
 	~String()
@@ -59,8 +68,8 @@ public:
 
 	String& operator=(const char* value)
 	{
-		char* temp = new char[strlen(m_buffer) + 1]();
-		strcpy(temp, m_buffer);
+		char* temp = new char[strlen(value) + 1]();
+		strcpy(temp, value);
 
 		Detach();
 
@@ -73,12 +82,17 @@ public:
 
 		return *this;
 	}
-	const char& operator[](const size_t index)
+	const char& operator[](const size_t index) const
 	{
 		return m_buffer[index];
 	}
 
-	void set_elem(size_t index, char value)
+
+	size_t GetCount() const
+	{
+		return *m_refCounter;
+	}
+	void SetElem(size_t index, char value)
 	{
 
 		char* temp = new char[strlen(m_buffer) + 1]();
@@ -90,24 +104,13 @@ public:
 		delete[]m_buffer;
 		m_buffer = new char[strlen(temp) + 1];
 		strcpy(m_buffer, temp);
-		
+
 		delete[]temp;
 	}
-
-	void Attach(const String& rhs)
+	
+	char* GetBuffer() const
 	{
-		m_buffer = new char[strlen(rhs.m_buffer) + 1];
-		strcpy(m_buffer, rhs.m_buffer);
-		m_refCounter = rhs.m_refCounter;
-		(*m_refCounter)++;
-	}
-	void Detach()
-	{
-		(*m_refCounter)--;
-		delete m_buffer;
-
-		m_buffer = nullptr;
-
+		return m_buffer;
 	}
 };
 
@@ -117,38 +120,33 @@ int main(int argc, char *argv[])
 {
 
 	String s("abc");
-	assert(s.count() == 1);
+	assert(s.GetCount() == 1);
 
 	{
 		String s2 = s;
-		assert(s.count() == 2);
-		assert(s2.count() == 2);
+		assert(s.GetCount() == 2);
+		assert(s2.GetCount() == 2);
 	}
 
-	assert(s.count() == 1);
+	assert(s.GetCount() == 1);
 
 	String s3 = s;
-	assert(s.count() == 2);
+	assert(s.GetCount() == 2);
 
 	String s4("xyz");
 	s3 = s4;
 
-	assert(s.count() == 1);
-
-
-	s4.set_elem(0, '@');
+	assert(s.GetCount() == 1);
+	
+	s4.SetElem(0, '@');
 
 	assert(s3[0] == 'x');
 	assert(s4[0] == '@');
 
-	assert(s3.count() == 1);
-	assert(s4.count() == 1);
 
-	String s1 = s;
-	s1 = "abc";
-	assert(s.count() == 1);
-	assert(s1.count() == 1);
+	assert(s3.GetCount() == s4.GetCount() && s4.GetCount() == 1);
 
+	assert(strcmp(s.GetBuffer(), "abc") == 0);
 
 
 	cout << "PASSED" << endl;
