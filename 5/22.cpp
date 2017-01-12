@@ -14,7 +14,7 @@ class String
 public:
 	String(const char* value)
 		: m_buffer(new char[strlen(value) + 1]),
-		  m_refCounter(new size_t(0))
+		m_refCounter(new size_t(0))
 	{
 		strcpy(m_buffer, value);
 		(*m_refCounter)++;
@@ -49,7 +49,7 @@ public:
 
 	String& operator=(const String& rhs)
 	{
-		if (rhs.m_buffer !=m_buffer)
+		if (rhs.m_buffer != m_buffer)
 		{
 			Detach();
 			Attach(rhs);
@@ -59,17 +59,29 @@ public:
 
 	String& operator=(const char* value)
 	{
+		char* temp = new char[strlen(m_buffer) + 1]();
+		strcpy(temp, m_buffer);
 
+		Detach();
+
+		delete[]m_buffer;
+		m_buffer = new char[strlen(temp) + 1];
+		strcpy(m_buffer, temp);
+
+
+		delete[]temp;
+
+		return *this;
 	}
-	const char& operator[](size_t index)
+	const char& operator[](const size_t index)
 	{
 		return m_buffer[index];
 	}
 
 	void set_elem(size_t index, char value)
 	{
-			
-		char*temp = new char[strlen(m_buffer) + 1]();
+
+		char* temp = new char[strlen(m_buffer) + 1]();
 		strcpy(temp, m_buffer);
 		temp[index] = value;
 
@@ -78,20 +90,24 @@ public:
 		delete[]m_buffer;
 		m_buffer = new char[strlen(temp) + 1];
 		strcpy(m_buffer, temp);
-
-		delete[]temp;		
+		
+		delete[]temp;
 	}
 
 	void Attach(const String& rhs)
 	{
-		m_buffer = rhs.m_buffer;
+		m_buffer = new char[strlen(rhs.m_buffer) + 1];
+		strcpy(m_buffer, rhs.m_buffer);
 		m_refCounter = rhs.m_refCounter;
 		(*m_refCounter)++;
 	}
 	void Detach()
 	{
 		(*m_refCounter)--;
+		delete m_buffer;
+
 		m_buffer = nullptr;
+
 	}
 };
 
@@ -113,12 +129,12 @@ int main(int argc, char *argv[])
 
 	String s3 = s;
 	assert(s.count() == 2);
-	
+
 	String s4("xyz");
-	s3 = s4;	
+	s3 = s4;
 
 	assert(s.count() == 1);
-	
+
 
 	s4.set_elem(0, '@');
 
@@ -127,6 +143,13 @@ int main(int argc, char *argv[])
 
 	assert(s3.count() == 1);
 	assert(s4.count() == 1);
+
+	String s1 = s;
+	s1 = "abc";
+	assert(s.count() == 1);
+	assert(s1.count() == 1);
+
+
 
 	cout << "PASSED" << endl;
 	return 0;
