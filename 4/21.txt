@@ -15,7 +15,8 @@ public:
 	{
 
 	}
-	virtual float square() = 0;
+	virtual float square() const = 0;
+	virtual ~Shape() {}
 };
 
 class Rectangle :public Shape
@@ -27,7 +28,7 @@ public:
 	{
 
 	}
-	float square() override
+	float square() const override
 	{
 		return m_width*m_height;
 	}
@@ -40,9 +41,9 @@ class Circle : public Shape
 public:
 	Circle(int x, int y, int r) : Shape(x, y), m_radius(r)
 	{
-		
+
 	}
-	float square() override
+	float square() const override
 	{
 		return pow(m_radius, 2)*M_PI;
 	}
@@ -55,9 +56,9 @@ class Triangle : public Shape
 public:
 	Triangle(int x, int y, float a1, float b1) : Shape(x, y), m_a(a1), m_b(b1)
 	{
-		
+
 	}
-	float square() override
+	float square() const override
 	{
 		return m_a*m_b*0.5;
 	}
@@ -70,10 +71,17 @@ int main()
 	figures[2] = new Triangle(5, 5, 3, 4);
 
 	float square_sum = 0;
-	for (int i = 0; i < 3; i++)
+	for (auto i = 0; i < 3; i++)
 	{
 		square_sum += figures[i]->square();
 	}
 	cout << square_sum << endl;
+
+	for (size_t i=0;i<3;i++)
+	{
+		delete figures[i];
+	}
+
+
 	return 1;
 }
