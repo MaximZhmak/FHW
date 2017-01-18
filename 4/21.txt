@@ -32,6 +32,7 @@ public:
 	{
 		return m_width*m_height;
 	}
+	~Rectangle(){}
 };
 
 class Circle : public Shape
@@ -47,6 +48,7 @@ public:
 	{
 		return pow(m_radius, 2)*M_PI;
 	}
+	~Circle(){}
 };
 class Triangle : public Shape
 {
@@ -62,6 +64,7 @@ public:
 	{
 		return m_a*m_b*0.5;
 	}
+	~Triangle(){}
 };
 int main()
 {
