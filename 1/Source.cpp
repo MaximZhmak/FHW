@@ -78,77 +78,75 @@ void main()
 
 	//}
 
-	//4. ѕересекаютс€ ли окружности?
+	//4. Do these circles intersect?
 
 	int x1, x2, r1, r2, y1, y2;
-	cout << "¬ведите  оординаты центра первой окружности -";
+	cout << "Please enter coordinates of first circle -";
 	cout << "x1 :";
 	cin >> x1;
 	cout << "y1 :";
 	cin >> y1;
-	cout << "¬ведите радиус первой окружности :";
+	cout << "Please enter radius of first circle :";
 	cin >> r1;
 
-	cout << "¬ведите  оординаты центра второй окружности -";
+	cout << "Please enter coordinates of second circle -";
 	cout << "x2 :";
 	cin >> x2;
 	cout << "y2 :";
 	cin >> y2;
-	cout << "¬ведите радиус второй окружности :";
+	cout << "Please enter radius of first circle :";
 	cin >> r2;
 
-	//найти рассто€ние мужду центрами двух окружностей
-	double distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-	if (distance > (r1 + r2))
-		cout << "ќкружности не пересекаютс€" << endl;
-	else if (distance == (r1 + r2))
-		cout << "ќкружности касаютс€" << endl;
-	else if (distance < r1&&r2 < r1 ||
-		     distance < r2&&r1 < r2)
-		cout << "ќдна окружность содержит другую*" << endl;
+	//find distance between centers of two circles
+	auto distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+
+	if (r1 > distance + r2 || r2>distance+r1)
+		cout << "One circle contains another" << endl; 
+	else if (r1+r2>distance)
+		cout << "Circles intersect" << endl;
 	else
-		cout << "ќкружности пересекаютс€" << endl;
+		cout << "Circles do not intersect" << endl;	
 
-	//5 явл€етс€ ли введенное число кубом целого числа? 
+			//5 явл€етс€ ли введенное число кубом целого числа? 
 
-	//cout << "Enter number: ";
-	//cin >> number;
-	//double result = 0;
-	//for (int i = 0; i <= 100; i++)
-	//{
-	//	result = pow(i, 3);
-	//	if (result == number)
-	//	{
-	//		cout << "yes: " << i << " ^ 3= " << number << endl;
-	//		return;
-	//	}
-	//}
-	//cout << "no" << endl;
+			//cout << "Enter number: ";
+			//cin >> number;
+			//double result = 0;
+			//for (int i = 0; i <= 100; i++)
+			//{
+			//	result = pow(i, 3);
+			//	if (result == number)
+			//	{
+			//		cout << "yes: " << i << " ^ 3= " << number << endl;
+			//		return;
+			//	}
+			//}
+			//cout << "no" << endl;
 
-	//6.1 явл€етс€ ли введенное число степенью двойки? 
+			//6.1 явл€етс€ ли введенное число степенью двойки? 
 
-	//cout<<"Enter number: ";
-	//cin >> number;
-	//double result = 0;
-	//for (int i=0;number>result;i++)
-	//{
-	//	result = pow(2, i);
-	//    if (result == number)
-	//    {
-	//		cout << "yes: 2^" << i << +" = " << number << endl;
-	//        return;
-	//    }
-	//}
-	//cout<<"no"<<endl;
+			//cout<<"Enter number: ";
+			//cin >> number;
+			//double result = 0;
+			//for (int i=0;number>result;i++)
+			//{
+			//	result = pow(2, i);
+			//    if (result == number)
+			//    {
+			//		cout << "yes: 2^" << i << +" = " << number << endl;
+			//        return;
+			//    }
+			//}
+			//cout<<"no"<<endl;
 
 
-	//6.2
-	//cout<<"Enter number: ";
-	//cin >> number;
-	//if ((number & (number - 1)) == 0)
-	//	cout << "true";
-	//else
-	//	cout << "false";
+			//6.2
+			//cout<<"Enter number: ";
+			//cin >> number;
+			//if ((number & (number - 1)) == 0)
+			//	cout << "true";
+			//else
+			//	cout << "false";
 
 
 
