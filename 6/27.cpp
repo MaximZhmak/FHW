@@ -78,9 +78,7 @@ int main()
 
 	while (file >> word)
 	{
-		cout << word << endl;
-
-
+		
 		::transform(word.begin(), word.end(), word.begin(), tolower);
 		TrimNotAlpha(word);
 
