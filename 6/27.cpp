@@ -17,7 +17,7 @@ void TrimNotAlpha(string&str)
 {
 	for (size_t i = 0; i < str.size(); i++)
 	{
-		if (!isalpha(str[i]))
+		if (str[i] < 0 || !isalpha(str[i]))
 		{
 			str.erase(i, 1);
 			i--;
@@ -78,6 +78,9 @@ int main()
 
 	while (file >> word)
 	{
+		cout << word << endl;
+
+
 		::transform(word.begin(), word.end(), word.begin(), tolower);
 		TrimNotAlpha(word);
 
