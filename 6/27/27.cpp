@@ -2,10 +2,10 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <map>
 #include <algorithm>
 #include <iterator>
-#include <set>
+#include <unordered_set>
+#include <unordered_map>
 
 #define ARRAY_LENGTH(array) (sizeof((array))/sizeof((array)[0]))
 
@@ -13,11 +13,16 @@ using namespace std;
 
 typedef pair<string, int> PAIR;
 
+bool NotAlpha(const char&c)
+{
+	return (c < 0 || !isalpha(c));
+}
+
+
 void TrimNotAlpha(string&str)
 {
 	//function deletes punctuation marks and numbers from words
-	remove_if(str.begin(), str.begin(),
-		[](const char&c) {return (c < 0 || !isalpha(c)); });
+	str.erase(remove_if(str.begin(), str.end(), NotAlpha), str.end());
 }
 
 bool IsSmallWord(const string& word)
@@ -45,12 +50,12 @@ bool IsSmallWord(const string& word)
 		"are",
 		"has",
 		"who",
-		"by", 
+		"by",
 		"about",
-		"which"
+		"which"	
 	};
-	
-	static const set<string> small_set(smallWords, smallWords+ARRAY_LENGTH(smallWords));	
+
+	static const unordered_set<string> small_set(smallWords, smallWords + ARRAY_LENGTH(smallWords));
 
 	auto it = find(small_set.begin(), small_set.end(), word);
 	if (it != small_set.end())
@@ -70,9 +75,11 @@ struct Compare
 
 int main()
 {
-	map<string, int> map;
+	int count = 0;
 
-	ifstream file("E://war and peace.txt");
+	unordered_map<string, int> map;
+
+	ifstream file("D://war and peace.txt");
 	if (!file.is_open())
 	{
 		cout << "FILE IS NOT OPEN!" << endl;
@@ -83,7 +90,7 @@ int main()
 
 	while (file >> word)
 	{
-
+		count++;
 		::transform(word.begin(), word.end(), word.begin(), tolower);
 		TrimNotAlpha(word);
 
@@ -99,7 +106,7 @@ int main()
 		}
 	}
 
-	vector<PAIR> myVector;
+	vector<PAIR> myVector(map.size());
 
 	copy(map.begin(), map.end(), back_inserter(myVector));
 	sort(myVector.begin(), myVector.end(), Compare());
@@ -107,5 +114,8 @@ int main()
 	cout << "--------------------------------------------------------------" << endl;
 	for (size_t i = 0; i < 10; i++)
 		cout << myVector[i].second << " " << myVector[i].first << endl;
+
+
+	cout << "total: " << count << endl;
 }
 
