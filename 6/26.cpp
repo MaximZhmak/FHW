@@ -110,9 +110,9 @@ class MFU :public Printer, public Scanner
 	string m_guarantee;
 public:
 	MFU(string name, int dpi, string type, string quarantee) :
-		Device(name),
-		Scanner(name, dpi),
+		Device(name),		
 		Printer(name, type),
+		Scanner(name, dpi),
 		m_guarantee(quarantee)
 	{
 
