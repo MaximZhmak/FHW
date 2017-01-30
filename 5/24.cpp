@@ -22,7 +22,7 @@ void InitializeArray(T* array, int size)
 }
 
 template <class T>
-T* Map(T array[], int size, T(*f)(T num))
+T* Map(T array[], int size, T(*f)(T& num))
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -32,7 +32,7 @@ T* Map(T array[], int size, T(*f)(T num))
 }
 
 template <class T>
-T* Filter(T array[], int &size, bool(*f)(T num))
+T* Filter(T array[], int &size, bool(*f)(const T& num))
 {
 	T * temp_array = new T[size];
 	int j = 0;
@@ -48,7 +48,7 @@ T* Filter(T array[], int &size, bool(*f)(T num))
 	return temp_array;
 }
 template <class T>
-T Reduce(const T array[], int size, T(*f)(T num1, T num2))
+T Reduce(const T array[], int size, T(*f)(const T& num1, const T& num2))
 {
 	T value = 0;
 	for (int shift = 1; shift < size; shift++)
@@ -61,34 +61,34 @@ T Reduce(const T array[], int size, T(*f)(T num1, T num2))
 
 //funcs for map
 template <class T>
-T Increment(T num)
+T Increment(T& num)
 {
 	return ++num;
 }
 template <class T>
-T Decrement(T num)
+T Decrement(T&num)
 {
 	return --num;
 }
 //funcs for filter
-template <class T>
-bool MoreThan10(T num)
+template <class T, int N>
+bool MoreThanN(const T& num)
 {
-	return num >10 ? true : false;
+	return num > N;
 }
-template <class T>
-bool LessThan10(T num)
+template <class T, int N>
+bool LessThanN(const T& num)
 {
-	return !MoreThan10(num);
+	return !MoreThanN<T, N>(num);
 }
 //funcs for reduce
 template <class T>
-T Sum(T num1, T num2)
+T Sum(const T& num1, const T& num2)
 {
 	return num1 + num2;
 }
 template <class T>
-T Subs(T num1, T num2)
+T Subs(const T& num1, const T& num2)
 {
 	return num1 - num2;
 }
@@ -121,7 +121,7 @@ int main()
 	//filter
 
 	int new_size = size;
-	int*array1 = Filter(array, new_size, LessThan10);
+	int*array1 = Filter(array, new_size, LessThanN<int,10>);
 	cout << "Elements of Array1 that are Less Then 10: " << endl;
 	PrintArray(array1, new_size);
 
@@ -129,11 +129,11 @@ int main()
 	new_size = size;
 	delete[]array1;
 
-	double*	arrayD1 = Filter(arrayD, new_size, MoreThan10);
+	double*	arrayD1 = Filter(arrayD, new_size, MoreThanN<double, 10>);
 	cout << "Elements of Array1 that are More Then 10: " << endl;
 	PrintArray(arrayD1, new_size);
 
-	
+
 	//reduce
 
 	cout << "Sum of elements of array: ";
