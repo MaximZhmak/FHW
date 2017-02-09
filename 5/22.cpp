@@ -24,6 +24,7 @@ class String
 		if ((*m_refCounter) == 0)
 		{
 			delete[]m_buffer;
+			delete m_refCounter;
 		}
 		m_buffer = nullptr;
 	}
@@ -46,21 +47,20 @@ public:
 	~String()
 	{
 		Detach();
+		//-------------------!
 	}
 
+	void swap(String& str)
+	{
+		::swap(m_buffer, str.m_buffer);
+		::swap(m_refCounter, str.m_refCounter);
+	}
 
 	String& operator=(const String& rhs)
 	{
-
-		if (rhs.m_buffer != m_buffer
-			)
+		if (&rhs != this)
 		{
-			Detach();
-			Attach(rhs);
-		}
-		else
-		{
-			m_buffer = rhs.GetBuffer();
+			String(rhs).swap(*this);
 		}
 		return *this;
 	}
@@ -68,18 +68,7 @@ public:
 	String& operator=(const char* value)
 	{
 
-		Detach();
-		if (*m_refCounter == 0)
-		{
-			(*m_refCounter)++;
-		}
-		else 
-		{
-			delete[]m_buffer;
-		}
-		m_buffer = new char[strlen(value) + 1];
-		strcpy(m_buffer, value);
-
+		String(value).swap(*this);
 		return *this;
 	}
 	const char& operator[](const size_t index) const
@@ -88,34 +77,19 @@ public:
 	}
 
 
-	size_t GetCount() const
+	const size_t GetCount() const
 	{
 		return *m_refCounter;
 	}
 	void SetElem(size_t index, char value)
 	{
-
 		if (GetCount() > 1)
-		{
-			char* temp = new char[strlen(m_buffer) + 1]();
-			strcpy(temp, m_buffer);
-			temp[index] = value;
+			String(m_buffer).swap(*this);
 
-			Detach();
-
-			delete[]m_buffer;
-			m_buffer = new char[strlen(temp) + 1];
-			strcpy(m_buffer, temp);
-
-			delete[]temp;
-		}
-		else
-		{
-			m_buffer[index] = value;
-		}
+		m_buffer[index] = value;
 	}
 
-	char* GetBuffer() const
+	const char* GetBuffer() const
 	{
 		return m_buffer;
 	}
