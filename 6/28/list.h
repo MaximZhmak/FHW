@@ -79,7 +79,7 @@ namespace my {
 	class list
 	{
 
-		list_Node<T>* const  sentinel = new list_Node<T>{ T(), nullptr, nullptr };
+		list_Node<T>* const  sentinel = new list_Node<T>{ T("SENTINEL"), nullptr, nullptr };
 		list_Node<T>* head = sentinel;
 		list_Node<T>* tail = sentinel;
 
@@ -168,9 +168,9 @@ namespace my {
 			update_tail();
 			update_sentinel();
 		}
-		void push_back(T elem)
+		void push_back(const T& elem)
 		{
-			list_Node<T>*tmp = new list_Node<T>{ elem, sentinel, tail };
+			list_Node<T>*tmp = new list_Node<T>{ elem, /*next*/sentinel, /*prev*/tail };
 			if (tail == sentinel)
 			{
 				push_front(elem);
@@ -178,6 +178,7 @@ namespace my {
 			}
 			tail->next = tmp;
 			tail = tmp;
+
 			update_tail();
 			update_sentinel();
 		}
@@ -198,22 +199,13 @@ namespace my {
 			if (tail->prev == sentinel)
 				return pop_front();
 			
-			tail->prev->next = sentinel;
+		
 			list_Node<T>* tmp = tail->prev;
 			delete tail;
 			tail = tmp;
 
-			tail->next = sentinel;
-			sentinel->prev = tail;
-
-			if (sentinel == tail)
-			{
-				tail = head;
-			}
-			if (sentinel == head)
-			{
-				tail = head;
-			}
+			update_tail();
+			update_sentinel();
 
 			return data;
 		}
@@ -228,11 +220,11 @@ namespace my {
 			for (; current != sentinel;)
 			{
 				std::swap(current->next, current->prev);
-				current = current->next;
+				current = current->prev;
 			}
 			
 			head = current->prev;
-			std::swap(head->next, head->prev);
+
 		}
 
 		bool empty()

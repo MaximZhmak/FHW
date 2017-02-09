@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 #include <cassert>
+#include <list>
 
 
 using namespace std;
@@ -20,27 +21,49 @@ int main()
 	string name1 = "Ivanov";
 	string name2 = "Petrov";
 
-	my::forward_list<string> forwList;
+
+
 	my::list<string> list;
 
 
-	list.push_back(name1);
-	list.push_back(name2);
+	{
+		my::list<string> list;
 
-	list.reverse();
+		list.push_back(name1);
+		list.pop_back();
+		list.push_back(name2);
+		list.push_back(name1);
+		list.push_back(name2);
 
-	assert(list.pop_back() == name1);
-	assert(list.pop_back() == name2);
-	assert(list.empty());
-	
-	forwList.push_front(name1);
-	forwList.push_front(name2);
+		list.reverse();
+	}
 
-	forwList.reverse();
+	{
+		my::list<int> my_list;
 
-	assert(forwList.pop_front() == name1);
-	assert(forwList.pop_front() == name2);
+		for (int i = 0; i < 1000; i++)
+			my_list.push_back(i);
 
+		my_list.reverse();
+
+		for (int i = 0; i < 1000; i++)
+			assert(my_list.pop_back() == i);
+
+	}
+
+	{
+		my::forward_list<string> forwList;
+
+		forwList.push_front(name1);
+		forwList.pop_front();
+		forwList.push_front(name2);
+		forwList.push_front(name1);
+
+		forwList.reverse();
+
+		assert(forwList.pop_front() == name2);
+		assert(forwList.pop_front() == name1);
+	}
 
 	cout << "PASSED" << endl;
 }
