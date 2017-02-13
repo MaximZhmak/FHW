@@ -13,8 +13,7 @@ struct FileLogger : EventListener
 {
     void notify(const Event& ev) override
     {
-        cout << __PRETTY_FUNCTION__ << endl;
-        cout << ev.getDescription() << endl;
+        cout << __PRETTY_FUNCTION__ <<"  "<< ev.getDescription() << endl;
     }
 };
 
@@ -22,8 +21,7 @@ struct ConnectionMgr : EventListener
 {
     void notify(const Event& ev) override
     {
-        cout << __PRETTY_FUNCTION__ << endl;
-        cout << ev.getDescription() << endl;
+            cout << __PRETTY_FUNCTION__ <<"  "<< ev.getDescription() << endl;
     }
 };
 
@@ -31,13 +29,12 @@ struct EventHandler : EventListener
 {
     void notify(const Event& ev) override
     {
-        cout << __PRETTY_FUNCTION__ << endl;
-        cout << ev.getDescription() << endl;
+            cout << __PRETTY_FUNCTION__ <<"  "<< ev.getDescription() << endl;
     }
 };
 
 
-int main(int argc, char *argv[])
+int main()
 {
     shared_ptr<EventListener> evListener1 = make_shared<FileLogger>();
     shared_ptr<EventListener> evListener2 = make_shared<ConnectionMgr>();
@@ -68,8 +65,16 @@ int main(int argc, char *argv[])
     cout<<"--------------------------------------------------------------"<<endl;
     cout<<"Event Happened"<<endl;
     EventManager::getInstance().publishEvent(connectionError);
-    //---------------------------------------------------
 
+    EventManager::getInstance().removeListener(evListener3);
+    {
+        //test : expired listener - not notified
+        cout<<"--------------------------------------------------------------"<<endl;
+        shared_ptr<EventListener> listener = make_shared<ConnectionMgr>();
+        EventManager::getInstance().addListener(listener);
+    }
+
+    EventManager::getInstance().publishEvent(Event("XXX"));
 
 
 
