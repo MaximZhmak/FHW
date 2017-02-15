@@ -76,8 +76,9 @@ public:
 		m_data[start] = elem;
 		++m_start;
 		cout << "push value: " << elem << endl;
-		cond.wait(lock);
+		
 		cond.notify_one();
+	//	cond.wait(lock);
 	}
 
 	T& front()
@@ -112,7 +113,7 @@ int main(int argc, char *argv[])
 	RingBuffer<int, N> ringBuffer;
 	thread push{ [&]()
 	{
-		int counter = N;
+		int counter = N*10;
 		while (counter)
 		{
 			ringBuffer.push_back(--counter);
@@ -129,7 +130,7 @@ int main(int argc, char *argv[])
 			value = ringBuffer.front();
 			ringBuffer.pop_front();
 
-			std::chrono::milliseconds timeout(50);
+			std::chrono::milliseconds timeout(10);
 			std::this_thread::sleep_for(timeout);
 		} while (value);
 		cout << "\tpop completed" << endl;
