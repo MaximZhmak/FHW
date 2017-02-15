@@ -205,12 +205,12 @@ public:
 		m_number--;
 		return tmp;
 	}
-	RomanNumber operator--()
+	RomanNumber& operator--()
 	{
 		--m_number;
 		return *this;
 	}
-	RomanNumber operator++()
+	RomanNumber& operator++()
 	{
 		++m_number;
 		return *this;
