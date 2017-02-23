@@ -11,15 +11,15 @@ class A : public Object   //receiver
 private:
     void dispatchMethod(const string& methodName) override
     {
-        if ("foo" == methodName)
+        if ("onFoo" == methodName)
         {
             onFoo();
         }
-        else if ("bar" == methodName)
+        else if ("onBar" == methodName)
         {
             onBar();
         }
-        else if ("baz" == methodName)
+        else if ("onBaz" == methodName)
         {
             onBaz();
         }
@@ -100,9 +100,7 @@ int main()
     d->connect(&b1, "baz", &a2, "onBaz");
     d->connect(&b2, "baz", &a2, "onBaz");
 
-
-    d->connect(&b2, "baz", &a2, "onBaz");
-
+        d->connect(&b2, "baz", &a2, "onBaz");
 
     b1.foo(); // a1.onFoo()
     b1.bar(); // a1.onBar(), a1.onBaz(), a2.onBar()
@@ -113,7 +111,11 @@ int main()
     b2.baz(); // a2.onBaz()
 
     d->disconnect(&b1, "foo", &a1, "onFoo");
+    d->disconnect(&b2, "baz", &a2, "onBaz");
+
+
     b1.foo(); // <nothing>
+    b2.baz();
 
     return 0;
 }
